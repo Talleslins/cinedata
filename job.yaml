@@ -1,0 +1,35 @@
+resources:
+  jobs:
+    cinedata:
+      name: cinedata
+      trigger:
+        pause_status: UNPAUSED
+        periodic:
+          interval: 1
+          unit: DAYS
+      tasks:
+        - task_key: Task_Bronze
+          notebook_task:
+            notebook_path: /Workspace/Users/pinheirotallesl@gmail.com/cinedata/Landing_to_Bronze
+            source: WORKSPACE
+        - task_key: Task_Silver
+          depends_on:
+            - task_key: Task_Bronze
+          notebook_task:
+            notebook_path: /Workspace/Users/pinheirotallesl@gmail.com/cinedata/Bronze_to_Silver
+            source: WORKSPACE
+        - task_key: Task_Gold
+          depends_on:
+            - task_key: Task_Silver
+          notebook_task:
+            notebook_path: /Workspace/Users/pinheirotallesl@gmail.com/cinedata/Silver_to_Gold
+            source: WORKSPACE
+        - task_key: Task_Analytics
+          depends_on:
+            - task_key: Task_Gold
+          notebook_task:
+            notebook_path: /Workspace/Users/pinheirotallesl@gmail.com/cinedata/Analitycs
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
